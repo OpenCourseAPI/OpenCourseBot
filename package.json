@@ -1,0 +1,31 @@
+{
+  "name": "opencoursebot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A handy discord bot for college-related functionality such as information about classes, professors, and general stats.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start:info && concurrently -n py,js -c \"green.bold,magenta.bold\" --handle-input \"npm run -s start:py\" \"npm run -s start:js\"",
+    "start:info": "echo \"Type 'py:rs' or 'js:rs' and press enter to restart either of the bots\"",
+    "start:py": "nodemon -q --watch false --exec \"python -u\" bots/py/bot.py",
+    "start:js": "nodemon -q --watch false bots/js/bot.js",
+    "lint": "prettier --check \"**/*.js\"",
+    "lint:fix": "prettier --write \"**/*.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Madhav Varshney <madhavarshney@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^6.0.0",
+    "discord-akairo": "^8.1.0",
+    "discord-paginationembed": "^2.1.0",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "kleur": "^4.1.4",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
+}

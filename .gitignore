@@ -1,0 +1,15 @@
+# General
+.env
+*.log
+.DS_Store
+
+# Node.js
+node_modules
+
+# Python
+__pycache__
+*.pyc
+.venv
+
+# Our Stuff
+data
