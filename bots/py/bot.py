@@ -20,6 +20,8 @@ extensions = [
     "commands.server",
     "commands.scrape",
     "commands.stats",
+    "commands.gradescrape",
+    "commands.grade",
 ]
 
 if __name__ == "__main__":
