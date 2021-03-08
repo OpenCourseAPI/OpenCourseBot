@@ -175,21 +175,19 @@ async def do_scrape():
 
 async def do_scrape_ucs():
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            "https://assist.org/api/institutions"
-        ) as response:
+        async with session.get("https://assist.org/api/institutions") as response:
             if response.status != 200:
                 raise RuntimeError
 
             data = await response.json()
             filtered_ucs = [
                 {
-                    'id': campus['id'],
-                    'code': campus['code'].strip(),
-                    'name': campus['names'][0]['name'].strip(),
+                    "id": campus["id"],
+                    "code": campus["code"].strip(),
+                    "name": campus["names"][0]["name"].strip(),
                 }
                 for campus in data
-                if campus['code'].startswith('UC')
+                if campus["code"].startswith("UC")
             ]
 
             print(filtered_ucs)
@@ -229,7 +227,7 @@ def getData(file_path):
         for row in reader:
             if not count:
                 count += 1
-                header = [col.replace('Major name', 'Major') for col in row]
+                header = [col.replace("Major name", "Major") for col in row]
 
             else:
                 major = {}

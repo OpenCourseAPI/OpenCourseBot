@@ -20,7 +20,7 @@ The commands and features of the bot are split accross two separate bots, which 
 
 Install [`Node.js v12+`](https://nodejs.org/) and [`npm`](https://www.npmjs.com/get-npm), and then install packages with:
 
-```shell
+```sh
 npm install
 ```
 
@@ -28,7 +28,7 @@ npm install
 
 Install [`Python 3.7+`](https://www.python.org/) and [`poetry`](https://python-poetry.org/docs/#installation), and then install packages with:
 
-```shell
+```sh
 poetry install
 ```
 
@@ -36,7 +36,7 @@ poetry install
 
 Run the following command to start both bots:
 
-```
+```sh
 poetry shell
 npm start
 ```

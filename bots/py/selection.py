@@ -19,7 +19,9 @@ async def select(ctx, options, kind):
     if not len(options):
 
         if kind == "Target College":
-            description = f"There is no agreement of your home college and your target college."
+            description = (
+                f"There is no agreement of your home college and your target college."
+            )
         else:
             description = f"{kind} Not Found!"
 
@@ -84,9 +86,7 @@ async def select(ctx, options, kind):
                 await showReactions(msg, curr)
 
         except asyncio.TimeoutError:
-            await ctx.channel.send(
-                ":no_entry: **Prompt closed due to inactivity.**"
-            )
+            await ctx.channel.send(":no_entry: **Prompt closed due to inactivity.**")
             await msg.delete()
             return
 
