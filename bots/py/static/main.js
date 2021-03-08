@@ -94,9 +94,9 @@ function renderCard(major) {
                     <div class="label">Apply</div>
                 </div>
                 <div class="item">
-                    <!-- <div class="value">${major.Admits} <span style="color: #999">${major['Admit Rate']}</span></div> -->
-                    <div class="value">${major.Admits} (${major['Admit Rate']})</div>
-                    <!-- <div class="value">${major.Admits} <span style="color: #999">·</span> ${major['Admit Rate']}</div>
+                    <!-- <div class="value">${major.Admits} <span style="color: #999">${major['Admit rate']}</span></div> -->
+                    <div class="value">${major.Admits} (${major['Admit rate']})</div>
+                    <!-- <div class="value">${major.Admits} <span style="color: #999">·</span> ${major['Admit rate']}</div>
                     <div class="value">${major.Admits}</div> -->
                     <div class="label">Admitted</div>
                 </div>
@@ -108,12 +108,12 @@ function renderCard(major) {
             <div class="data" style="justify-content: center;">
                 <!--
                 <div class="item">
-                    <div class="value">${major['Admit Rate']}</div>
+                    <div class="value">${major['Admit rate']}</div>
                     <div class="label">Admit Rate</div>
                 </div>
                 -->
                 <div class="item gpa-range">
-                    <div class="value">${major['Admit GPA Range']}</div>
+                    <div class="value">${major['Admit GPA range']}</div>
                     <div class="label">Admit GPA Range</div>
                 </div>
             </div>
@@ -132,54 +132,11 @@ function renderTableRow(major) {
         <td>${major.Applicants}</td>
         <td>${major.Admits}</td>
         <td>${major.Enrolls}</td>
-        <td>${major['Admit Rate']}</td>
-        <td>${major['Admit GPA Range']}</td>
+        <td>${major['Admit rate']}</td>
+        <td>${major['Admit GPA range']}</td>
     `
 
     return tr
-}
-
-function renderCard(major) {
-    const div = document.createElement('div')
-
-    div.className = 'card'
-    div.innerHTML = `
-        <h2 class="campus">${major.Campus}</h2>
-        <h2>${major.Major}</h2>
-        <div>
-            <div class="data">
-                <div class="item">
-                    <div class="value">${major.Applicants}</div>
-                    <div class="label">Apply</div>
-                </div>
-                <div class="item">
-                    <!-- <div class="value">${major.Admits} <span style="color: #999">${major['Admit Rate']}</span></div> -->
-                    <div class="value">${major.Admits} (${major['Admit Rate']})</div>
-                    <!-- <div class="value">${major.Admits} <span style="color: #999">·</span> ${major['Admit Rate']}</div>
-                    <div class="value">${major.Admits}</div> -->
-                    <div class="label">Admitted</div>
-                </div>
-                <div class="item">
-                    <div class="value">${major.Enrolls}</div>
-                    <div class="label">Enroll</div>
-                </div>
-            </div>
-            <div class="data" style="justify-content: center;">
-                <!--
-                <div class="item">
-                    <div class="value">${major['Admit Rate']}</div>
-                    <div class="label">Admit Rate</div>
-                </div>
-                -->
-                <div class="item gpa-range">
-                    <div class="value">${major['Admit GPA Range']}</div>
-                    <div class="label">Admit GPA Range</div>
-                </div>
-            </div>
-        </div>
-    `
-
-    return div
 }
 
 function showMessage(text) {

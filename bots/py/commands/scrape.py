@@ -8,7 +8,7 @@ from discord.ext import commands
 
 from bs4 import BeautifulSoup
 
-ROOT_URL = "https://visualizedata.ucop.edu/t/Public/views/TransferbyCCM/ByMajorName?:embed=y&:showVizHome=no&:host_url=https%3A%2F%2Fvisualizedata.ucop.edu%2F&:tabs=yes&:toolbar=yes&:showAppBanner=false&:showShareOptions=true&:display_spinner=no&:loadOrderID=0"
+ROOT_URL = "https://visualizedata.ucop.edu/t/Public/views/TransferbyCCM/Bymajorname?:embed=y&:showVizHome=no&:host_url=https%3A%2F%2Fvisualizedata.ucop.edu%2F&:embed_code_version=3&:tabs=yes&:toolbar=yes&:showAppBanner=false&:display_spinner=no&:loadOrderID=0"
 
 
 async def create_session(session):
@@ -173,6 +173,31 @@ async def do_scrape():
         json.dump(allData, file)
 
 
+async def do_scrape_ucs():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            "https://assist.org/api/institutions"
+        ) as response:
+            if response.status != 200:
+                raise RuntimeError
+
+            data = await response.json()
+            filtered_ucs = [
+                {
+                    'id': campus['id'],
+                    'code': campus['code'].strip(),
+                    'name': campus['names'][0]['name'].strip(),
+                }
+                for campus in data
+                if campus['code'].startswith('UC')
+            ]
+
+            print(filtered_ucs)
+
+            with open("data/allUCs.json", "w") as file:
+                json.dump(filtered_ucs, file)
+
+
 @commands.command()
 async def scrape(ctx):
     await ctx.channel.send("Scraping started")
@@ -180,8 +205,15 @@ async def scrape(ctx):
     await ctx.channel.send("Scraping finished")
 
 
+@commands.command()
+async def scrape_ucs(ctx):
+    await do_scrape_ucs()
+    await ctx.channel.send("Scraped UCs")
+
+
 def setup(bot):
     bot.add_command(scrape)
+    bot.add_command(scrape_ucs)
 
 
 find_file_path = lambda name: f"data/{name}-data.csv"
@@ -189,22 +221,21 @@ find_file_path = lambda name: f"data/{name}-data.csv"
 
 def getData(file_path):
     data = {}
-    with open(file_path) as file:
 
+    with open(file_path) as file:
         reader = csv.reader(file, delimiter="\t")
         count = 0
 
         for row in reader:
-
             if not count:
                 count += 1
-                header = row
+                header = [col.replace('Major name', 'Major') for col in row]
 
             else:
                 major = {}
                 for i in range(len(header)):
                     major[header[i]] = row[i]
 
-                data[row[2].title()] = major
+                data[row[2].lower()] = major
 
     return data

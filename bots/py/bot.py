@@ -16,7 +16,7 @@ client = Bot(command_prefix=getenv("BOT_PREFIX", "?"))
 
 extensions = [
     "commands.admin",
-    # 'commands.assist',
+    "commands.assist",
     "commands.server",
     "commands.scrape",
     "commands.stats",

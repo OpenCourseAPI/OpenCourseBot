@@ -7,7 +7,7 @@ from discord.ext import commands
 from college import College
 from major import Major
 from emojis import emojis
-from commands.assist import Assist
+from selection import select
 
 thumbnail = "https://universityofcalifornia.edu/sites/default/files/ucal-fb-image.png"
 webpage_url = getenv(
@@ -15,10 +15,9 @@ webpage_url = getenv(
 )
 
 
-class UCStats(Assist):
+class UCStats(commands.Cog):
     @commands.command()
     async def ucstats(self, ctx, *, msg=""):
-
         mylist = msg.split(" for ")
         usage_str = f"Usage: `{ctx.prefix}{ctx.invoked_with} <UC> for <major>`\nExample: `{ctx.prefix}{ctx.invoked_with} ucd for bio`"
 
@@ -36,7 +35,7 @@ class UCStats(Assist):
         # Generate the home college options.
         college_options = findUC(college)
 
-        final_college, description = await self.select(ctx, college_options, "Target")
+        final_college, description = await select(ctx, college_options, "Target")
 
         if not final_college:
             description = f'{emojis["ban"]} `Target` Not Found!'
@@ -65,7 +64,7 @@ class UCStats(Assist):
             return
 
         try:
-            final_major, description3 = await self.select(ctx, major_options, "Major")
+            final_major, description3 = await select(ctx, major_options, "Major")
         except TypeError:
             await msg.delete()
             return
