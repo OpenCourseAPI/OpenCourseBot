@@ -3,6 +3,7 @@ const Discord = require('discord.js')
 const fetch = require('node-fetch')
 
 const getUsage = require('../utils/getUsage')
+const replaceCampusNames = require('../utils/replaceCampusNames')
 
 function getRMPUrl(campus, q) {
     let schoolName, schoolId
@@ -129,7 +130,7 @@ class RateCommand extends Command {
             return
         }
 
-        args.campus = args.campus.toLowerCase()
+        args.campus = replaceCampusNames(args.campus.toLowerCase())
 
         if (!['fh', 'da'].includes(args.campus)) {
             message.util.send(
@@ -171,10 +172,8 @@ class RateCommand extends Command {
             others.length &&
             `*Also found:* ${others
                 .map(
-                    (prof) =>
-                        `${prof['teacherfullname_s']} (${
-                            prof['averageratingscore_rf'] || '?'
-                        })`
+                    ({ teacherfullname_s, averageratingscore_rf }) =>
+                        `${teacherfullname_s} (${averageratingscore_rf || '?'})`
                 )
                 .join(', ')}`
 

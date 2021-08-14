@@ -16,6 +16,30 @@ const EXTERNAL_COMMANDS = [
             ],
         },
     },
+    {
+        id: 'ucstats',
+        aliases: ['ucstats'],
+        description: {
+            text: 'Search UC Transfer Stats',
+            usage: 'ucx for target major',
+            examples: [
+                { name: '', cmd: 'ucb for bio' },
+                { name: '', cmd: 'ucla for comp sci' },
+            ],
+        },
+    },
+    {
+        id: 'grade',
+        aliases: ['grade'],
+        description: {
+            text: 'Search grade distributions at Foothill College.',
+            usage: 'professor for subject [course]',
+            examples: [
+                { name: '', cmd: 'allison herman for everything' },
+                { name: '', cmd: 'cascarano for phys 4a' },
+            ],
+        },
+    },
 ]
 
 class HelpCommand extends Command {
@@ -41,6 +65,8 @@ class HelpCommand extends Command {
             .setFooter('Hope you enjoy!')
 
         const addCommandToHelp = (command) => {
+            if (command.description.hidden) return
+
             let description = command.description.text || 'No description'
 
             description +=

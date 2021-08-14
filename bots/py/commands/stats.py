@@ -10,6 +10,7 @@ from emojis import emojis
 from selection import select
 
 thumbnail = "https://universityofcalifornia.edu/sites/default/files/ucal-fb-image.png"
+uc_stats_webpage = "https://www.universityofcalifornia.edu/infocenter/transfers-major"
 webpage_url = getenv(
     "WEBPAGE_URL", f"https://{getenv('REPL_SLUG')}.{getenv('REPL_OWNER')}.repl.co"
 )
@@ -90,18 +91,13 @@ class UCStats(commands.Cog):
 
         embed.title = f"{final_major} at {final_college.code}: "
         embed.description += (
-            f"\n{emojis['flag']} `Links ` **Official UC website is below**"
+            f"\n{emojis['flag']} `Links ` **[Go to the official UC Transfer Stats page]({uc_stats_webpage})** or **[our webpage]({webpage_url})**"
         )
-        embed.description += (
-            "\nhttps://www.universityofcalifornia.edu/infocenter/transfers-major"
-        )
-        embed.set_footer(text=f"See more at {webpage_url}")
 
         await msg.edit(embed=embed)
 
 
 def findUC(target):
-
     if not target:
         return [], 0
 
@@ -150,7 +146,6 @@ def findMajor(target, majors):
 
 
 def getCode(college):
-
     with open("data/allUCs.json") as f:
         allInstitutions = json.load(f)
 

@@ -18,7 +18,10 @@ log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
 PORT = getenv("SERVER_PORT", 3000)
-enable_keepalive = getenv("ENABLE_KEEPALIVE", False)
+REPL_SLUG = getenv("REPL_SLUG")
+REPL_OWNER = getenv("REPL_OWNER")
+ENABLE_KEEPALIVE = getenv("ENABLE_KEEPALIVE", True if REPL_SLUG and REPL_OWNER else False)
+
 server = None
 app = Flask(__name__, static_url_path="", static_folder="../static")
 
@@ -83,7 +86,7 @@ def start_server():
 
 def fetch_on_thread():
     print("[keepalive] Doing keepalive fetch")
-    requests.get("https://ASSISTant.davidtso.repl.co")
+    requests.get(f'https://{REPL_SLUG}.{REPL_OWNER}.repl.co')
 
 
 @tasks.loop(seconds=45)
@@ -97,7 +100,7 @@ def setup(bot):
     if server:
         print("[server] WARNING! server already exists")
 
-    if enable_keepalive:
+    if ENABLE_KEEPALIVE:
         keepalive_loop.start()
 
     server = threading.Thread(target=start_server)
@@ -107,7 +110,7 @@ def setup(bot):
 def teardown(bot):
     global server
 
-    if enable_keepalive:
+    if ENABLE_KEEPALIVE:
         keepalive_loop.cancel()
 
     if server:

@@ -21,7 +21,7 @@ async def gradescrape(ctx):
         res.raise_for_status()
 
         # Make a soup from our HTML string
-        soup = BeautifulSoup(res.text, "html5lib")
+        soup = BeautifulSoup(res.text, "html.parser")
 
         # Find all the 'tr' tags that contain instructor data
         rows = soup.select("tbody tr")

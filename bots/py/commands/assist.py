@@ -1,14 +1,11 @@
 import requests
-import asyncio
 import discord
 
 from discord.ext import commands
 
 from college import College
 from major import Major
-from emojis import emojis, numeric_emojis, num_emojis
-from page import Page
-from utils import pad_z
+from emojis import emojis
 from selection import select
 
 url = "https://assist.org/api/institutions"

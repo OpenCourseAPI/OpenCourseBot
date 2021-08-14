@@ -12,7 +12,7 @@ years = ["2015-2016", "2016-2017", "2017-2018", "2018-2019", "2019-2020"]
 async def grade(ctx, *, msg: str = " "):
 
     prof_and_class = msg.split(" for ")
-    usage_str = '**Usage:** \n`1. ?grade "Professor" for "Subject" "(Class Code)"`\n`2. ?grade "Professor" for everything`'
+    usage_str = f'**Usage:** \n`1. {ctx.prefix}grade professor for subject [course]"`\n`2. {ctx.prefix}grade professor for everything`'
 
     if len(prof_and_class) != 2:
         await ctx.channel.send(usage_str)
@@ -35,13 +35,19 @@ async def grade(ctx, *, msg: str = " "):
     data = getProfessorData(target_prof, depart, classCode)
 
     if ifEmpty(data):
-        await ctx.channel.send(content=ctx.message.author.mention + " No Result!")
+        await ctx.message.reply("No results!")
         return
 
     pages = generatePages(data)
 
     embed = pages[0].getEmbed()
-    msg = await ctx.channel.send(content=ctx.message.author.mention, embed=embed)
+
+    try:
+        msg = await ctx.channel.send(content=ctx.message.author.mention, embed=embed)
+    except discord.errors.HTTPException:
+        await ctx.message.reply("Too many results! Please search for a more specific term.")
+        return
+
     await showReactions(msg, pages[0])
 
     # Check function for the wait_for function later.
@@ -90,6 +96,7 @@ def getProfessorData(target_prof, subject, classCode):
 
     interested = ["quarter", "subject", "number", "A", "B", "C", "D", "F", "W"]
     allData = {}
+    should_show_all = subject == 'everything'
 
     for year, instructors in jsonData.items():
 
@@ -109,7 +116,7 @@ def getProfessorData(target_prof, subject, classCode):
 
             if (
                 flag
-                and subject.upper() == instructor_data["subject"]
+                and (should_show_all or subject.upper() == instructor_data["subject"])
                 and (classCode.upper() in instructor_data["number"] or not classCode)
             ):
 
@@ -142,31 +149,17 @@ def generatePages(data):
         for instructor in instructors.keys():
 
             classList = instructors[instructor]
-            msg += f'**For Professor {" ".join(instructor.split(",")[::-1])}\n**'
+            msg += f'**For Professor {getProfessorString(instructor)}\n**'
 
             for classData in classList:
-                msg += f"`{classData['quarter']}" + " " * (
-                    len("spring") - len(classData["quarter"])
-                )
+                msg += f"`{getTermString(classData['quarter'])}` "
 
-                classNumber = classData["number"][-4:].replace("0", " ")
-                classNumber = classNumber.replace("F", " ")
+                msg += f"`{getSubjectString(classData['subject'])}` "
 
-                if len(classNumber) < 4:
-                    classNumber = " " * (4 - len(classNumber)) + classNumber
-
-                msg += f"` `{classNumber}` "
+                msg += f"`{getClassNumberString(classData['number'])}` "
 
                 for letter in letters:
-                    try:
-                        num = int(classData[letter])
-                    except ValueError:
-                        num = 0
-
-                    if num < 10:
-                        msg += f"`  {num} {letter}` "
-                    else:
-                        msg += f"` {num} {letter}` "
+                    msg += f"`{getGradeString(classData[letter], letter)}` "
 
                 msg += "\n"
 
@@ -207,6 +200,73 @@ async def showReactions(msg, page):
         await msg.add_reaction(emojis["next"])
 
     await msg.add_reaction(emojis["exit"])
+
+
+
+def getProfessorString(instructor):
+    return " ".join(instructor.split(",")[::-1])
+
+
+def getGradeString(num, letter):
+    """
+    Get the formatted string with the distribution and the letter.
+    """
+
+    # detect if num is empty string
+    try:
+        num = int(num)
+    except ValueError:
+        num = 0
+
+    return f" {num} {letter}" if num < 10 else f"{num} {letter}"
+
+
+def getTermString(term):
+    """
+    Get the formatted string with a certain number of blanks at the end.
+    >>> getTermString('Spring')
+    'Spring'
+    >>> getTermString('Fall')
+    'Fall  '
+    """
+    return term + (6 - len(term)) * " "
+
+
+def getSubjectString(subject):
+    """
+    Get the formatted string with a certain number of blanks.
+    >>> getSubjectString("CS")
+    '  CS'
+    >>> getSubjectString("CHEM")
+    'CHEM'
+    """
+    return (4 - len(subject)) * " " + subject
+
+
+def getClassNumberString(classNumber):
+    """
+    Get the formatted string filtered out 'F00..' in class code.
+    >>> getClassCodeString("F001AH")
+    ' 1AH'
+    >>> getClassCodeString("F0010")
+    '  10'
+    >>> getClassCodeString("F248A")
+    '248A'
+    """
+
+    # first generate the list of number 1 to 9 for later use.
+    one_to_nine = [str(i) for i in range(1, 10)]
+    num = 0
+
+    # loop through classCode to find the first number in it
+    for i in range(len(classNumber)):
+        if classNumber[i] in one_to_nine:
+            num = i
+            break
+
+    # get the target substring based on the num that we just got
+    target = classNumber[num:]
+    return (4 - len(target)) * " " + target
 
 
 def setup(client):

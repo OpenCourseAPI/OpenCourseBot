@@ -32,6 +32,16 @@ Install [`Python 3.7+`](https://www.python.org/) and [`poetry`](https://python-p
 poetry install
 ```
 
+### Configuration
+
+Create a file called `.env` with the following content:
+
+```env
+BOT_TOKEN=<discord bot token>
+BOT_OWNERS=<comma separated Discord user IDs>
+BOT_PREFIX=<command prefix>
+```
+
 ### Start
 
 Run the following command to start both bots:

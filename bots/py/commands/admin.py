@@ -36,6 +36,12 @@ class Admin(commands.Cog):
         except commands.errors.ExtensionNotLoaded:
             await ctx.send("Extension not loaded")
 
+    @commands.command()
+    async def stats(self, ctx):
+        server_list = '\n'.join([guild.name for guild in self.bot.guilds])
+
+        await ctx.send(f"__**Servers**__\n{server_list}")
+
 
 def setup(bot):
     bot.add_cog(Admin(bot))

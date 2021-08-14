@@ -5,6 +5,7 @@ const fetch = require('node-fetch')
 
 const { API_URL } = require('../config')
 const getUsage = require('../utils/getUsage')
+const replaceCampusNames = require('../utils/replaceCampusNames')
 
 // const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'U']
 const days = ['M', 'T', 'W', 'R', 'F', 'S', 'U']
@@ -86,19 +87,15 @@ class FindCommand extends Command {
     }
 
     exec(message, args) {
-        console.log(
-            `Find: ${message.author.username}#${message.author.discriminator}`,
-            args
-        )
-
-        args.campus && (args.campus = args.campus.toLowerCase())
+        args.campus &&
+            (args.campus = replaceCampusNames(args.campus.toLowerCase()))
         args.dept && (args.dept = args.dept.toUpperCase())
         args.course && (args.course = args.course.toUpperCase())
 
         args.term && (args.term = args.term.toLowerCase())
 
         if (!args.term && !args.year) {
-            args.term = 'spring'
+            args.term = 'fall'
             args.year = 2021
         }
 

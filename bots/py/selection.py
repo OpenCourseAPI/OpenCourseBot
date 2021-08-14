@@ -1,8 +1,4 @@
-import requests
 import asyncio
-import discord
-
-from discord.ext import commands
 
 from emojis import emojis, numeric_emojis, num_emojis
 from page import Page
@@ -17,7 +13,6 @@ async def select(ctx, options, kind):
 
     # Check if there is no option.
     if not len(options):
-
         if kind == "Target College":
             description = (
                 f"There is no agreement of your home college and your target college."
@@ -29,7 +24,6 @@ async def select(ctx, options, kind):
 
     # If there is only one option, it is the one we are looking for.
     elif len(options) == 1:
-
         kind = kind.split()[0]
         kind += " " * (6 - len(kind))
 
@@ -62,9 +56,7 @@ async def select(ctx, options, kind):
         curr = pages[0]
 
         try:
-
             while True:
-
                 reaction, user = await ctx.bot.wait_for(
                     "reaction_add", timeout=20.0, check=check
                 )

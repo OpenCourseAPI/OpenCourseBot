@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "description": "A handy discord bot for college-related functionality such as information about classes, professors, and general stats.",
-  "main": "index.js",
   "scripts": {
     "start": "npm run start:info && concurrently -n py,js -c \"green.bold,magenta.bold\" --handle-input \"npm run -s start:py\" \"npm run -s start:js\"",
     "start:info": "echo \"Type 'py:rs' or 'js:rs' and press enter to restart either of the bots\"",
