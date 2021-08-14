@@ -12,7 +12,7 @@ years = ["2015-2016", "2016-2017", "2017-2018", "2018-2019", "2019-2020"]
 async def grade(ctx, *, msg: str = " "):
 
     prof_and_class = msg.split(" for ")
-    usage_str = f'**Usage:** \n`1. {ctx.prefix}grade professor for subject [course]"`\n`2. {ctx.prefix}grade professor for everything`'
+    usage_str = f'**Usage:** \n`1. {ctx.prefix}grade professor for subject [course]`\n`2. {ctx.prefix}grade professor for everything`'
 
     if len(prof_and_class) != 2:
         await ctx.channel.send(usage_str)
